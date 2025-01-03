@@ -75,6 +75,11 @@
         .character-right {
             right: 10px;
         }
+
+        @keyframes fall {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
+        }
     </style>
 </head>
 <body>
@@ -91,7 +96,7 @@
 
     <!-- Background Music -->
     <audio autoplay loop>
-        <source src="c:\Users\Lenovo\Downloads\nayeon-happy-birthday-to-you-mp3.mp3" type="audio/mp3">
+        <source src="nayeon-happy-birthday-to-you-mp3.mp3" type="audio/mp3">
         Your browser does not support the audio tag.
     </audio>
 
@@ -117,6 +122,10 @@
         const answerElement = document.getElementById('answer');
         const finalMessage = document.getElementById('final-message');
 
+        window.onload = () => {
+            questionContainer.style.display = "block";
+        };
+
         function nextQuestion() {
             const answer = answerElement.value;
             if (questions[currentQuestion].type === "text" && !answer) {
@@ -131,12 +140,13 @@
 
                 if (currentQ.type === "yesno") {
                     answerElement.style.display = "none";
-                    document.querySelectorAll('button').forEach(btn => btn.style.display = "none");
-                    questionContainer.innerHTML += `
+                    questionContainer.innerHTML = `
+                        <p id="question">${currentQ.text}</p>
                         <button onclick="nextQuestion()">Yes</button>
                         <button onclick="nextQuestion()">No</button>
                     `;
                 } else {
+                    answerElement.style.display = "block";
                     answerElement.value = "";
                 }
             } else {
