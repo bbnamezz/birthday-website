@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <style>
+        body {
+            font-family: 'Arial, sans-serif';
+            margin: 0;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            animation: bg-animation 10s infinite alternate;
+            overflow: hidden;
+            text-align: center;
+            color: white;
+        }
+
+        @keyframes bg-animation {
+            0% { background: linear-gradient(45deg, #ff9a9e, #fad0c4); }
+            50% { background: linear-gradient(45deg, #fbc2eb, #a6c1ee); }
+            100% { background: linear-gradient(45deg, #ff9a9e, #fad0c4); }
+        }
+
+        .question-container, .final-message {
+            display: none;
+            margin-top: 20vh;
+        }
+
+        .question-container {
+            font-size: 1.5em;
+        }
+
+        input, button {
+            font-size: 1.2em;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            background: #ff6f61;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #ff4d4d;
+        }
+
+        .final-message img {
+            max-width: 400px;
+            margin-top: 20px;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* Add additional CSS for anime/game characters as decorations */
+        .character-left, .character-right {
+            position: fixed;
+            width: 150px;
+            bottom: 10px;
+        }
+
+        .character-left {
+            left: 10px;
+        }
+
+        .character-right {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="question-container" id="question-container">
+        <p id="question">What is your birth date?</p>
+        <input type="text" id="answer" placeholder="Type your answer here...">
+        <button onclick="nextQuestion()">Submit</button>
+    </div>
+
+    <div class="final-message" id="final-message">
+        <h1>No matter what, we love you! 🎉</h1>
+        <img src="https://media.giphy.com/media/l3vRlt8kty8K7gC6g/giphy.gif" alt="Celebration">
+    </div>
+
+    <!-- Background Music -->
+    <audio autoplay loop>
+        <source src="c:\Users\Lenovo\Downloads\nayeon-happy-birthday-to-you-mp3.mp3" type="audio/mp3">
+        Your browser does not support the audio tag.
+    </audio>
+
+    <!-- Character Images -->
+    <img class="character-left" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyLbq4w3xGnCsgXjTr02AkCadNe8vSJ9jyuv8EfGJbFhOFQWi3lECmIqe5nJGnrZDKaqw&usqp=CAU" alt="Character Left">
+    <img class="character-right" src="https://i.pinimg.com/236x/12/d6/43/12d643f0c40ad54b14c2485f70623498.jpg" alt="Character Right">
+
+    <!-- Confetti -->
+    <div class="confetti" id="confetti"></div>
+
+    <script>
+        let currentQuestion = 0;
+        const questions = [
+            { text: "What is your birth date?", type: "text" },
+            { text: "What is your name?", type: "text" },
+            { text: "Do you know who you want to be in the future?", type: "yesno" },
+            { text: "Do you love mint chocolate ice cream?", type: "yesno" },
+            { text: "Do you like caramel frappuccino?", type: "yesno" },
+        ];
+
+        const questionContainer = document.getElementById('question-container');
+        const questionElement = document.getElementById('question');
+        const answerElement = document.getElementById('answer');
+        const finalMessage = document.getElementById('final-message');
+
+        function nextQuestion() {
+            const answer = answerElement.value;
+            if (questions[currentQuestion].type === "text" && !answer) {
+                alert("Please enter your answer.");
+                return;
+            }
+
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                const currentQ = questions[currentQuestion];
+                questionElement.textContent = currentQ.text;
+
+                if (currentQ.type === "yesno") {
+                    answerElement.style.display = "none";
+                    document.querySelectorAll('button').forEach(btn => btn.style.display = "none");
+                    questionContainer.innerHTML += `
+                        <button onclick="nextQuestion()">Yes</button>
+                        <button onclick="nextQuestion()">No</button>
+                    `;
+                } else {
+                    answerElement.value = "";
+                }
+            } else {
+                showFinalMessage();
+            }
+        }
+
+        function showFinalMessage() {
+            questionContainer.style.display = "none";
+            finalMessage.style.display = "block";
+            launchConfetti();
+        }
+
+        function launchConfetti() {
+            const confetti = document.getElementById('confetti');
+            for (let i = 0; i < 100; i++) {
+                const div = document.createElement('div');
+                div.style.position = 'absolute';
+                div.style.width = '10px';
+                div.style.height = '10px';
+                div.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                div.style.top = `${Math.random() * window.innerHeight}px`;
+                div.style.left = `${Math.random() * window.innerWidth}px`;
+                div.style.animation = `fall ${Math.random() * 5 + 2}s linear infinite`;
+                confetti.appendChild(div);
+            }
+        }
+    </script>
+</body>
+</html>
